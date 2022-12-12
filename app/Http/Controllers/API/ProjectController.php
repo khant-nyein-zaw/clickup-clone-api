@@ -5,8 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\ProjectUser;
 
 class ProjectController extends Controller
 {
@@ -31,16 +30,21 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $project = new Project();
-        $project->project_name = $request->project_name;
-        $project->description = $request->project_description;
-        $project->started_at = date('Y/m/d');
-        $project->ended_at = $request->project_due_date;
-        $project->save();
+        $project = new Project;
+        $this->insertDataFromRequest($project, $request);
+
+        $createdProject = new ProjectUser;
+        $createdProject->user_id = $request->user()->id;
+        $createdProject->project_id = $project->id;
+        $createdProject->save();
+
         return response()->json([
             'status' => true,
             'message' => 'New project created',
-            'data' => $project
+            'data' => [
+                'project' => $project,
+                'createdUser' => $createdProject
+            ]
         ]);
     }
 
@@ -52,7 +56,10 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Project::where('id', $id)->first();
+        return response()->json([
+            'projects' => $data
+        ]);
     }
 
     /**
@@ -62,9 +69,16 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreProjectRequest $request, $id)
     {
-        //
+        $project = Project::findOrFail($id);
+        $this->insertDataFromRequest($project, $request);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Project data updated',
+            'data' => $project,
+        ]);
     }
 
     /**
@@ -75,6 +89,23 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Project::find($id)->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Project was deleted successfully',
+            'isDeleted' => $data
+        ]);
+    }
+
+    /**
+     * data insert or update
+     */
+    private function insertDataFromRequest($project, $request)
+    {
+        $project->project_name = $request->project_name;
+        $project->description = $request->project_description;
+        $project->started_at = $request->project_started_at;
+        $project->ended_at = $request->project_ended_at;
+        $project->save();
     }
 }

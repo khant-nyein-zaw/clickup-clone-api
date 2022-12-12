@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreProjectRequest extends FormRequest
+class UpdateProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -36,7 +36,8 @@ class StoreProjectRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'messages' => $validator->errors()
+            'message' => 'please provide valid data',
+            'data' => $validator->errors()
         ]));
     }
 }

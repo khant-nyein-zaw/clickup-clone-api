@@ -6,7 +6,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreProjectRequest extends FormRequest
+class StoreTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,12 @@ class StoreProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'project_name' => 'required|max:255',
-            'project_started_at' => 'required|date',
-            'project_ended_at' => 'required|date'
+            'task_name' => 'required|max:255',
+            'task_description' => 'min:10',
+            'project_id' => 'required|integer',
+            'priority' => 'required|integer',
+            'started_at' => 'required',
+            'ended_at' => 'required'
         ];
     }
 
