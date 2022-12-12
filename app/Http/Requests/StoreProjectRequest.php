@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class RegisterRequest extends FormRequest
+class StoreProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,10 +26,8 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'email' => 'required|string|unique:users,email',
-            'password' => Password::min(8)->mixedCase()->numbers(),
-            'phone' => 'required'
+            'project_name' => 'required|max:255',
+            'project_due_date' => 'required|date'
         ];
     }
 
@@ -38,16 +35,7 @@ class RegisterRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'message' => 'authorization error',
-            'data' => $validator->errors()
-        ], 401));
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'You username is required',
-            'email.unique' => 'This email is already signed up for another account',
-        ];
+            'message' => 'token not found'
+        ]));
     }
 }

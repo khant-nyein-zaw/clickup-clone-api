@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProjectRequest;
+use App\Models\Project;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -14,7 +17,10 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $data = Project::all();
+        return response()->json([
+            'projects' => $data
+        ]);
     }
 
     /**
@@ -23,9 +29,19 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        //
+        $project = new Project();
+        $project->project_name = $request->project_name;
+        $project->description = $request->project_description;
+        $project->started_at = date('Y/m/d');
+        $project->ended_at = $request->project_due_date;
+        $project->save();
+        return response()->json([
+            'status' => true,
+            'message' => 'New project created',
+            'data' => $project
+        ]);
     }
 
     /**
