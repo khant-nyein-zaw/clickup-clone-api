@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('project_users', function (Blueprint $table) {
             $table->id();
-            $table->integer('project_id');
+            $table->integer('project_id')->unique();
             $table->integer('user_id');
             $table->timestamps();
         });

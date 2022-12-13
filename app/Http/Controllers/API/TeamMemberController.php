@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreTaskRequest;
-use App\Models\Task;
-use App\Models\TaskStage;
+use App\Http\Requests\StoreTeamMemberRequest;
+use App\Models\Role;
+use App\Models\Team;
+use App\Models\TeamMember;
+use Illuminate\Http\Request;
 
-class TaskController extends Controller
+class TeamMemberController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +18,13 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $data = Task::all();
+        $data = TeamMember::select('team_members.id', 'roles.role_name', 'teams.team_name')
+            ->leftJoin('teams', 'team_members.team_id', 'teams.id')
+            ->leftJoin('roles', 'team_members.role_id', 'roles.id')
+            ->get();
         return response()->json([
             'status' => true,
-            'tasks' => $data
+            'teamMembers' => $data
         ]);
     }
 
@@ -29,21 +34,25 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTaskRequest $request)
+    public function store(StoreTeamMemberRequest $request)
     {
-        $task = Task::create($request->all());
+        $team = Team::create([
+            'team_name' => $request->team_name
+        ]);
 
-        $taskStage = TaskStage::create([
-            'task_id' => $task->id,
-            'task_stage' => 0
+        $role = Role::create([
+            'role_name' => $request->role_name
+        ]);
+
+        $data = TeamMember::create([
+            'user_id' => $request->user()->id,
+            'team_id' => $team->id,
+            'role_id' => $role->id
         ]);
 
         return response()->json([
             'status' => true,
-            'data' => [
-                'createdTask' => $task,
-                'stage' => $taskStage
-            ]
+            'newTeamMember' => $data
         ]);
     }
 
@@ -55,11 +64,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $data = Task::where('id', $id)->first();
-        return response()->json([
-            'status' => true,
-            'task' => $data
-        ]);
+        //
     }
 
     /**
@@ -69,14 +74,9 @@ class TaskController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreTaskRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $task = Task::findOrFail($id)->update($request->all());
-
-        return response()->json([
-            'status' => true,
-            'updatedTask' => $task
-        ]);
+        //
     }
 
     /**
@@ -87,9 +87,6 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $data = Task::find($id)->delete();
-        return response()->json([
-            'isDeleted' => $data
-        ]);
+        //
     }
 }

@@ -18,6 +18,7 @@ class ProjectController extends Controller
     {
         $data = Project::all();
         return response()->json([
+            'status' => true,
             'projects' => $data
         ]);
     }
@@ -39,9 +40,8 @@ class ProjectController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'New project created',
             'data' => [
-                'project' => $project,
+                'createdProject' => $project,
                 'createdUser' => $createdProject
             ]
         ]);
@@ -57,7 +57,8 @@ class ProjectController extends Controller
     {
         $data = Project::where('id', $id)->first();
         return response()->json([
-            'projects' => $data
+            'status' => true,
+            'project' => $data
         ]);
     }
 
@@ -70,12 +71,11 @@ class ProjectController extends Controller
      */
     public function update(StoreProjectRequest $request, $id)
     {
-        $project = Project::find($id)->update($request->all());
+        $project = Project::findOrFail($id)->update($request->all());
 
         return response()->json([
             'status' => true,
-            'message' => 'Project data updated',
-            'data' => $project,
+            'updatedProject' => $project,
         ]);
     }
 
@@ -89,8 +89,6 @@ class ProjectController extends Controller
     {
         $data = Project::find($id)->delete();
         return response()->json([
-            'status' => true,
-            'message' => 'Project was deleted successfully',
             'isDeleted' => $data
         ]);
     }

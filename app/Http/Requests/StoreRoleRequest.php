@@ -2,13 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Validation\Rule;
 
-class RegisterRequest extends FormRequest
+class StoreRoleRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,10 +27,10 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:255',
-            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->user)],
-            'password' => Password::min(8)->mixedCase()->numbers(),
-            'phone' => 'required'
+            'role_name' => [
+                'required',
+                Rule::unique('roles', 'role_name')->ignore($this->role)
+            ],
         ];
     }
 
@@ -39,16 +38,14 @@ class RegisterRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'message' => 'authorization error',
-            'data' => $validator->errors()
-        ], 401));
+            'messages' => $validator->errors()
+        ]));
     }
 
     public function messages()
     {
         return [
-            'name.required' => 'You username is required',
-            'email.unique' => 'This email is already signed up for another account',
+            'role_name.unique' => 'This role has already been filled up by another user',
         ];
     }
 }
