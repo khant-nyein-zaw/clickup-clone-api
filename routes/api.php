@@ -14,7 +14,7 @@ Route::post('/login', [AuthController::class, 'login']);
 /**
  * API resources routes
  */
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->prefix('task')->group(function () {
     Route::apiResources([
         'projects' => ProjectController::class,
         'tasks' => TaskController::class

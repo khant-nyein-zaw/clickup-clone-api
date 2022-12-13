@@ -27,8 +27,8 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'project_name' => 'required|max:255',
-            'project_started_at' => 'required|date',
-            'project_ended_at' => 'required|date'
+            'started_at' => 'required|date',
+            'ended_at' => 'required|date'
         ];
     }
 

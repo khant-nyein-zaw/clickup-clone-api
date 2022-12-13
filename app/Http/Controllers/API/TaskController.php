@@ -30,12 +30,11 @@ class TaskController extends Controller
      */
     public function store(StoreTaskRequest $request)
     {
-        $task = new Task;
-        $this->insertDataFromRequest($task, $request);
-        $taskStage = new TaskStage;
-        $taskStage->task_id = $task->id;
-        $taskStage->task_stage = 0;
-        $taskStage->save();
+        $task = Task::create($request->all());
+        $taskStage = TaskStage::create([
+            'task_id' => $task->id,
+            'task_stage' => 0
+        ]);
 
         return response()->json([
             'status' => true,
@@ -70,8 +69,7 @@ class TaskController extends Controller
      */
     public function update(StoreTaskRequest $request, $id)
     {
-        $task = Task::findOrFail($id);
-        $this->insertDataFromRequest($task, $request);
+        $task = Task::find($id)->update($request->all());
 
         return response()->json([
             'status' => true,
@@ -94,19 +92,5 @@ class TaskController extends Controller
             'message' => 'Task was deleted successfully',
             'isDeleted' => $data
         ]);
-    }
-
-    /**
-     * insert data from request into db
-     */
-    private function insertDataFromRequest($task, $request)
-    {
-        $task->task_name = $request->task_name;
-        $task->description = $request->task_description;
-        $task->project_id = $request->project_id;
-        $task->priority = $request->priority;
-        $task->started_at = $request->started_at;
-        $task->ended_at = $request->ended_at;
-        $task->save();
     }
 }

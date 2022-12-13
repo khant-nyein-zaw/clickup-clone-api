@@ -27,11 +27,11 @@ class StoreTaskRequest extends FormRequest
     {
         return [
             'task_name' => 'required|max:255',
-            'task_description' => 'min:10',
+            'description' => 'min:10',
             'project_id' => 'required|integer',
             'priority' => 'required|integer',
-            'started_at' => 'required',
-            'ended_at' => 'required'
+            'started_at' => 'required|date',
+            'ended_at' => 'required|date'
         ];
     }
 

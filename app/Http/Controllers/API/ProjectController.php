@@ -30,13 +30,12 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        $project = new Project;
-        $this->insertDataFromRequest($project, $request);
+        $project = Project::create($request->all());
 
-        $createdProject = new ProjectUser;
-        $createdProject->user_id = $request->user()->id;
-        $createdProject->project_id = $project->id;
-        $createdProject->save();
+        $createdProject = ProjectUser::create([
+            'user_id' => $request->user()->id,
+            'project_id' => $project->id
+        ]);
 
         return response()->json([
             'status' => true,
@@ -71,8 +70,7 @@ class ProjectController extends Controller
      */
     public function update(StoreProjectRequest $request, $id)
     {
-        $project = Project::findOrFail($id);
-        $this->insertDataFromRequest($project, $request);
+        $project = Project::find($id)->update($request->all());
 
         return response()->json([
             'status' => true,
@@ -95,17 +93,5 @@ class ProjectController extends Controller
             'message' => 'Project was deleted successfully',
             'isDeleted' => $data
         ]);
-    }
-
-    /**
-     * data insert or update
-     */
-    private function insertDataFromRequest($project, $request)
-    {
-        $project->project_name = $request->project_name;
-        $project->description = $request->project_description;
-        $project->started_at = $request->project_started_at;
-        $project->ended_at = $request->project_ended_at;
-        $project->save();
     }
 }
