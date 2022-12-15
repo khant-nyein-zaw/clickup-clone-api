@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'status' => false,
                 'message' => 'authentication attempt failed',
                 // 'data' => $credentials
-            ], 401);
+            ]);
         }
 
         return response()->json([

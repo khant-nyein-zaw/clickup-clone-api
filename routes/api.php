@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\ProjectController;
 use App\Http\Controllers\API\TaskController;
+use App\Http\Controllers\API\TeamController;
 use App\Http\Controllers\API\TeamMemberController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,10 +16,11 @@ Route::post('/login', [AuthController::class, 'login']);
 /**
  * API resources routes
  */
-Route::middleware('auth:sanctum')->prefix('project-management')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
     Route::apiResources([
         'projects' => ProjectController::class,
         'tasks' => TaskController::class,
+        'teams' => TeamController::class
     ]);
     Route::apiResource('team_members', TeamMemberController::class)->middleware('teamMember.auth');
 });

@@ -39,9 +39,9 @@ class RegisterRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status' => false,
-            'message' => 'authorization error',
-            'data' => $validator->errors()
-        ], 401));
+            'message' => 'Validation error',
+            'errors' => $validator->errors()
+        ]));
     }
 
     public function messages()
