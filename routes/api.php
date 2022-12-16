@@ -20,7 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResources([
         'projects' => ProjectController::class,
         'tasks' => TaskController::class,
-        'teams' => TeamController::class
+        'teams' => TeamController::class,
+        'roles' => RoleController::class
     ]);
     Route::apiResource('team_members', TeamMemberController::class)->middleware('teamMember.auth');
 });

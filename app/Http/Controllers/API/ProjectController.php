@@ -40,9 +40,9 @@ class ProjectController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => [
-                'createdProject' => $project,
-                'createdUser' => $createdProject
+            'createdData' => [
+                'project' => $project,
+                'user' => $createdProject
             ]
         ]);
     }
@@ -71,11 +71,11 @@ class ProjectController extends Controller
      */
     public function update(StoreProjectRequest $request, $id)
     {
-        $project = Project::findOrFail($id)->update($request->all());
+        $data = Project::findOrFail($id)->update($request->all());
 
         return response()->json([
             'status' => true,
-            'updatedProject' => $project,
+            'updatedData' => $data,
         ]);
     }
 

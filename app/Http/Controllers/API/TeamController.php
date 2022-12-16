@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreTeamRequest;
+use App\Models\Team;
 
 class TeamController extends Controller
 {
@@ -14,7 +15,10 @@ class TeamController extends Controller
      */
     public function index()
     {
-        //
+        $data = Team::all();
+        return response()->json([
+            'teams' => $data
+        ]);
     }
 
     /**
@@ -23,9 +27,13 @@ class TeamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTeamRequest $request)
     {
-        //
+        $data = Team::create($request->all());
+        return response()->json([
+            'status' => true,
+            'team' => $data
+        ]);
     }
 
     /**
@@ -36,7 +44,11 @@ class TeamController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = Team::where('id', $id)->first();
+        return response()->json([
+            'status' => true,
+            'team' => $data
+        ]);
     }
 
     /**
@@ -46,9 +58,13 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreTeamRequest $request, $id)
     {
-        //
+        $data = Team::findOrFail($id)->update($request->all());
+        return response()->json([
+            'status' => true,
+            'updatedData' => $data
+        ]);
     }
 
     /**
@@ -59,6 +75,9 @@ class TeamController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Team::find($id)->delete();
+        return response()->json([
+            'isDeleted' => $data
+        ]);
     }
 }

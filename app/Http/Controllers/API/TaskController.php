@@ -40,8 +40,8 @@ class TaskController extends Controller
 
         return response()->json([
             'status' => true,
-            'data' => [
-                'createdTask' => $task,
+            'createdData' => [
+                'task' => $task,
                 'stage' => $taskStage
             ]
         ]);
@@ -71,11 +71,11 @@ class TaskController extends Controller
      */
     public function update(StoreTaskRequest $request, $id)
     {
-        $task = Task::findOrFail($id)->update($request->all());
+        $data = Task::findOrFail($id)->update($request->all());
 
         return response()->json([
             'status' => true,
-            'updatedTask' => $task
+            'updatedData' => $data
         ]);
     }
 
