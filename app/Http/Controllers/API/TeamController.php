@@ -44,7 +44,7 @@ class TeamController extends Controller
      */
     public function show($id)
     {
-        $data = Team::where('id', $id)->first();
+        $data = Team::firstWhere('id', $id);
         return response()->json([
             'status' => true,
             'team' => $data
@@ -75,7 +75,7 @@ class TeamController extends Controller
      */
     public function destroy($id)
     {
-        $data = Team::find($id)->delete();
+        $data = Team::findOrFail($id)->delete();
         return response()->json([
             'isDeleted' => $data
         ]);

@@ -42,7 +42,7 @@ class StoreTeamRequest extends FormRequest
     public function messages()
     {
         return [
-            'team_name.unique' => 'This team has already been created',
+            'team_name.unique' => 'The team name has already taken',
         ];
     }
 }

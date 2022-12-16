@@ -33,10 +33,12 @@ class ProjectController extends Controller
     {
         $project = Project::create($request->all());
 
-        $createdProject = ProjectUser::create([
-            'user_id' => $request->user()->id,
-            'project_id' => $project->id
-        ]);
+        if ($project) {
+            $createdProject = ProjectUser::create([
+                'user_id' => $request->user()->id,
+                'project_id' => $project->id
+            ]);
+        }
 
         return response()->json([
             'status' => true,

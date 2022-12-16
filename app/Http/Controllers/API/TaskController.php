@@ -33,10 +33,12 @@ class TaskController extends Controller
     {
         $task = Task::create($request->all());
 
-        $taskStage = TaskStage::create([
-            'task_id' => $task->id,
-            'task_stage' => 0
-        ]);
+        if ($task) {
+            $taskStage = TaskStage::create([
+                'task_id' => $task->id,
+                'task_stage' => 0,
+            ]);
+        }
 
         return response()->json([
             'status' => true,
@@ -55,7 +57,7 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $data = Task::where('id', $id)->first();
+        $data = Task::firstWhere('id', $id);
         return response()->json([
             'status' => true,
             'task' => $data
@@ -87,7 +89,7 @@ class TaskController extends Controller
      */
     public function destroy($id)
     {
-        $data = Task::find($id)->delete();
+        $data = Task::findOrFail($id)->delete();
         return response()->json([
             'isDeleted' => $data
         ]);

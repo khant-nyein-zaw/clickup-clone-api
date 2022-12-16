@@ -18,7 +18,7 @@ class TeamMemberController extends Controller
      */
     public function index()
     {
-        $data = TeamMember::select('team_members.id', 'roles.role_name', 'teams.team_name')
+        $data = TeamMember::select('team_members.*', 'roles.role_name', 'teams.team_name')
             ->leftJoin('teams', 'team_members.team_id', 'teams.id')
             ->leftJoin('roles', 'team_members.role_id', 'roles.id')
             ->get();

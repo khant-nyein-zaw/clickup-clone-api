@@ -44,7 +44,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $data = Role::where('id', $id)->first();
+        $data = Role::firstWhere('id', $id);
         return response()->json([
             'status' => true,
             'role' => $data
@@ -75,7 +75,7 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $data = Role::find($id)->delete();
+        $data = Role::findOrFail($id)->delete();
         return response()->json([
             'isDeleted' => $data
         ]);
