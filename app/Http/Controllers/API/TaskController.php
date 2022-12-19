@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
+use App\Models\AssignTo;
 use App\Models\Task;
 use App\Models\TaskStage;
 
@@ -36,6 +37,7 @@ class TaskController extends Controller
         if ($task) {
             $taskStage = TaskStage::create([
                 'task_id' => $task->id,
+                'user_id' => $request->user_id,
                 'task_stage' => 0,
             ]);
         }

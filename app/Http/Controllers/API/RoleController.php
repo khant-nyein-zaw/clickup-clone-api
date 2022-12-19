@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRoleRequest;
+use App\Models\TeamMember;
 
 class RoleController extends Controller
 {
@@ -29,10 +30,18 @@ class RoleController extends Controller
      */
     public function store(StoreRoleRequest $request)
     {
-        $data = Role::create($request->all());
+        $role = Role::create($request->all());
+
+        $teamMember = TeamMember::create([
+            'user_id' => $request->user()->id,
+            'team_id' => $request->team_id,
+            'role_id' => $role->id
+        ]);
+
         return response()->json([
             'status' => true,
-            'role' => $data
+            'role' => $role,
+            'newTeamMember' => $teamMember
         ]);
     }
 

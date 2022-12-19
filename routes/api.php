@@ -24,7 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'projects' => ProjectController::class,
         'tasks' => TaskController::class,
         'teams' => TeamController::class,
-        'roles' => RoleController::class
+        'roles' => RoleController::class,
+        'team_members' => TeamMemberController::class
     ]);
-    Route::apiResource('team_members', TeamMemberController::class)->middleware('teamMember.auth');
 });
