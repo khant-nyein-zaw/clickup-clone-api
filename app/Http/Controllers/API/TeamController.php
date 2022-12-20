@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTeamRequest;
 use App\Models\Team;
+use App\Models\TeamMember;
 
 class TeamController extends Controller
 {
@@ -76,6 +77,7 @@ class TeamController extends Controller
     public function destroy($id)
     {
         $data = Team::findOrFail($id)->delete();
+        TeamMember::where('team_id', $id)->delete();
         return response()->json([
             'isDeleted' => $data
         ]);

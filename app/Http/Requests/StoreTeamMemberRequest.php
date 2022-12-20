@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class StoreProjectRequest extends FormRequest
+class StoreTeamMemberRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +26,8 @@ class StoreProjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'project_name' => 'required|max:255',
-            'description' => 'min:8|max:10000',
-            'started_at' => 'required|date',
-            'ended_at' => 'required|date'
+            'role_id' => 'required|integer',
+            'team_id' => 'required|integer'
         ];
     }
 
@@ -39,5 +37,13 @@ class StoreProjectRequest extends FormRequest
             'status' => false,
             'messages' => $validator->errors()
         ]));
+    }
+
+    public function messages()
+    {
+        return [
+            'team_id.required' => 'Team Name is required',
+            'role_id.required' => 'Role Name is required',
+        ];
     }
 }

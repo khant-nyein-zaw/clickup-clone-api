@@ -34,7 +34,7 @@ class TaskController extends Controller
     {
         $task = Task::create($request->all());
 
-        if ($task) {
+        if (isset($task)) {
             $taskStage = TaskStage::create([
                 'task_id' => $task->id,
                 'user_id' => $request->user_id,

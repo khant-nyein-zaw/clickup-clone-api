@@ -8,6 +8,7 @@ use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\TeamController;
 use App\Http\Controllers\API\ProjectController;
 use App\Http\Controllers\API\TeamMemberController;
+use App\Http\Controllers\API\UserController;
 
 /**
  * User login and register routes
@@ -20,7 +21,9 @@ Route::post('/login', [AuthController::class, 'login']);
  */
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/counts', [HomeController::class, 'getCounts']);
+    Route::get('/userList/{id}', [UserController::class, 'userList']);
     Route::apiResources([
+        'users' => UserController::class,
         'projects' => ProjectController::class,
         'tasks' => TaskController::class,
         'teams' => TeamController::class,

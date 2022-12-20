@@ -26,7 +26,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'account registeration completed successfully',
-            'token' => $tokenResult->plainTextToken
+            'token' => $tokenResult->plainTextToken,
+            'userInfo' => $user
         ], 200);
     }
 
@@ -47,7 +48,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'account logged in successfully',
-            'token' => $user->createToken('api token')->plainTextToken
+            'token' => $user->createToken('api token')->plainTextToken,
+            'userInfo' => $user
         ], 200);
     }
 }

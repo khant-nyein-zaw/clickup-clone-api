@@ -33,7 +33,7 @@ class ProjectController extends Controller
     {
         $project = Project::create($request->all());
 
-        if ($project) {
+        if (isset($project)) {
             $createdProject = ProjectUser::create([
                 'user_id' => $request->user()->id,
                 'project_id' => $project->id
@@ -74,7 +74,6 @@ class ProjectController extends Controller
     public function update(StoreProjectRequest $request, $id)
     {
         $data = Project::findOrFail($id)->update($request->all());
-
         return response()->json([
             'status' => true,
             'updatedData' => $data,
@@ -89,7 +88,8 @@ class ProjectController extends Controller
      */
     public function destroy($id)
     {
-        $data = Project::find($id)->delete();
+        $data = Project::findOrFail($id)->delete();
+        ProjectUser::where('project_id', $id)->delete();
         return response()->json([
             'isDeleted' => $data
         ]);

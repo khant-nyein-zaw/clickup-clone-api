@@ -4,8 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTeamMemberRequest;
-use App\Models\Role;
-use App\Models\Team;
 use App\Models\TeamMember;
 use Illuminate\Http\Request;
 
@@ -30,6 +28,26 @@ class TeamMemberController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(StoreTeamMemberRequest $request)
+    {
+        $data = TeamMember::create([
+            'user_id' => $request->user()->id,
+            'team_id' => $request->team_id,
+            'role_id' => $request->role_id
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'newTeamMember' => $data
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -37,7 +55,15 @@ class TeamMemberController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = TeamMember::where('team_members.id', $id)->select('users.name as user_name', 'users.email as user_email', 'roles.role_name', 'teams.team_name')
+            ->leftJoin('teams', 'team_members.team_id', 'teams.id')
+            ->leftJoin('roles', 'team_members.role_id', 'roles.id')
+            ->leftJoin('users', 'team_members.user_id', 'users.id')
+            ->first();
+        return response()->json([
+            'status' => true,
+            'teamMember' => $data
+        ]);
     }
 
     /**
@@ -47,9 +73,18 @@ class TeamMemberController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreTeamMemberRequest $request, $id)
     {
-        //
+        $data = TeamMember::find($id)->update([
+            'user_id' => $request->user()->id,
+            'team_id' => $request->team_id,
+            'role_id' => $request->role_id
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'newTeamMember' => $data
+        ]);
     }
 
     /**
@@ -60,6 +95,5 @@ class TeamMemberController extends Controller
      */
     public function destroy($id)
     {
-        //
     }
 }

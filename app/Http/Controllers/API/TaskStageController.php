@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\Role;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreRoleRequest;
-use App\Models\TeamMember;
+use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class TaskStageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +14,7 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $data = Role::all();
-        return response()->json([
-            'roles' => $data
-        ]);
+        //
     }
 
     /**
@@ -28,13 +23,9 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRoleRequest $request)
+    public function store(Request $request)
     {
-        $role = Role::create($request->all());
-        return response()->json([
-            'status' => true,
-            'role' => $role,
-        ]);
+        //
     }
 
     /**
@@ -45,11 +36,7 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $data = Role::firstWhere('id', $id);
-        return response()->json([
-            'status' => true,
-            'role' => $data
-        ]);
+        //
     }
 
     /**
@@ -59,13 +46,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreRoleRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $data = Role::findOrFail($id)->update($request->all());
-        return response()->json([
-            'status' => true,
-            'updatedData' => $data
-        ]);
+        //
     }
 
     /**
@@ -76,9 +59,6 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $data = Role::findOrFail($id)->delete();
-        return response()->json([
-            'isDeleted' => $data
-        ]);
+        //
     }
 }

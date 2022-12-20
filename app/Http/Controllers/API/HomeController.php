@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API;
 use App\Models\Task;
 use App\Models\Team;
 use App\Models\Project;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
