@@ -95,5 +95,10 @@ class TeamMemberController extends Controller
      */
     public function destroy($id)
     {
+        $data = TeamMember::find('id', $id);
+        $data->delete();
+        return response()->json([
+            'isDeleted' => $data
+        ]);
     }
 }

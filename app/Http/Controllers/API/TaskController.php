@@ -38,9 +38,7 @@ class TaskController extends Controller
 
         return response()->json([
             'status' => true,
-            'createdData' => [
-                'task' => $task,
-            ]
+            'createdTask' => $task
         ]);
     }
 
