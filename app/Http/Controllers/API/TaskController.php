@@ -17,7 +17,9 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $data = Task::all();
+        $data = Task::select('tasks.*', 'projects.project_name')
+            ->leftJoin('projects', 'tasks.project_id', 'projects.id')
+            ->get();
         return response()->json([
             'status' => true,
             'tasks' => $data
@@ -34,19 +36,10 @@ class TaskController extends Controller
     {
         $task = Task::create($request->all());
 
-        if (isset($task)) {
-            $taskStage = TaskStage::create([
-                'task_id' => $task->id,
-                'user_id' => $request->user_id,
-                'task_stage' => 0,
-            ]);
-        }
-
         return response()->json([
             'status' => true,
             'createdData' => [
                 'task' => $task,
-                'stage' => $taskStage
             ]
         ]);
     }
@@ -59,7 +52,15 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $data = Task::firstWhere('id', $id);
+        $data = Task::select(
+            'tasks.*',
+            'projects.project_name',
+            'task_stages.task_stage'
+        )
+            ->where('tasks.id', $id)
+            ->rightJoin('task_stages', 'tasks.id', 'task_stages.task_id')
+            ->leftJoin('projects', 'tasks.project_id', 'projects.id')
+            ->first();
         return response()->json([
             'status' => true,
             'task' => $data

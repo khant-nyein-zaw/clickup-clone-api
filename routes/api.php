@@ -7,8 +7,10 @@ use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\TeamController;
 use App\Http\Controllers\API\ProjectController;
+use App\Http\Controllers\API\TaskStageController;
 use App\Http\Controllers\API\TeamMemberController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\AssignToController;
 
 /**
  * User login and register routes
@@ -28,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
         'tasks' => TaskController::class,
         'teams' => TeamController::class,
         'roles' => RoleController::class,
+        'assign_tos' => AssignToController::class,
         'team_members' => TeamMemberController::class
     ]);
 });
