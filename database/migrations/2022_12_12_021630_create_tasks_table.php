@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('project_id');
             $table->integer('priority'); // 0 -> low | 1 -> medium | 2 -> high
+            $table->integer('task_stage')->default(0); // 0 -> not started | 1 -> in progress | 2 -> done
+            $table->integer('assignee_id');
             $table->date('started_at');
             $table->date('ended_at');
             $table->timestamps();

@@ -6,11 +6,9 @@ use App\Http\Controllers\API\HomeController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\TeamController;
-use App\Http\Controllers\API\ProjectController;
-use App\Http\Controllers\API\TaskStageController;
-use App\Http\Controllers\API\TeamMemberController;
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\AssignToController;
+use App\Http\Controllers\API\ProjectController;
+use App\Http\Controllers\API\TeamMemberController;
 
 /**
  * User login and register routes
@@ -25,13 +23,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // counts api of tasks, projects, teams
     Route::get('/counts', [HomeController::class, 'getCounts']);
     // user list for assigning tasks
-    Route::get('/userList/{id}', [UserController::class, 'userList']);
-    // assigned tasks for the user from others
-    Route::get('/taskList/{userId}', [AssignToController::class, 'taskList']);
-    Route::post('/assign/task', [AssignToController::class, 'store']);
-    // task stages api for changing task status
-    Route::post('/task_stages', [TaskStageController::class, 'store']);
-    Route::put('/task_stages/{id}', [TaskStageController::class, 'update']);
+    Route::get('/userList', [UserController::class, 'userList']);
+    Route::get('/assignedTasks/{userId}', [TaskController::class, 'tasksAssigned']);
+    Route::put('/changeTaskStage/{id}', [TaskController::class, 'changeTaskStage']);
     // resources
     Route::apiResources([
         'projects' => ProjectController::class,

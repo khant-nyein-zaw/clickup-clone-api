@@ -4,9 +4,8 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTaskRequest;
-use App\Models\AssignTo;
+use App\Http\Requests\UpdateTaskStageRequest;
 use App\Models\Task;
-use App\Models\TaskStage;
 
 class TaskController extends Controller
 {
@@ -19,10 +18,11 @@ class TaskController extends Controller
     {
         $data = Task::select('tasks.*', 'projects.project_name')
             ->leftJoin('projects', 'tasks.project_id', 'projects.id')
+            ->leftJoin('users', 'tasks.assignee', 'users.id')
             ->get();
         return response()->json([
             'status' => true,
-            'tasks' => $data
+            'taskList' => $data
         ]);
     }
 
@@ -35,7 +35,6 @@ class TaskController extends Controller
     public function store(StoreTaskRequest $request)
     {
         $task = Task::create($request->all());
-
         return response()->json([
             'status' => true,
             'createdTask' => $task
@@ -50,18 +49,46 @@ class TaskController extends Controller
      */
     public function show($id)
     {
-        $data = Task::select(
-            'tasks.*',
-            'projects.project_name',
-            'task_stages.task_stage'
-        )
+        $data = Task::select('tasks.*', 'projects.project_name',)
             ->where('tasks.id', $id)
-            ->rightJoin('task_stages', 'tasks.id', 'task_stages.task_id')
             ->leftJoin('projects', 'tasks.project_id', 'projects.id')
             ->first();
         return response()->json([
             'status' => true,
             'task' => $data
+        ]);
+    }
+
+    /**
+     * Change task stage(status)
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function changeTaskStage(UpdateTaskStageRequest $request, $id)
+    {
+        $isUpdated = Task::findOrFail($id)->update($request->all());
+        $task = Task::firstWhere('id', $id);
+        return response()->json([
+            'updated' => $isUpdated,
+            'task' => $task
+        ]);
+    }
+
+    /**
+     * Display a specific user's(assignee) tasks
+     * @param  int  $userId
+     * @return \Illuminate\Http\Response
+     */
+    public function tasksAssigned($userId)
+    {
+        $data = Task::select('tasks.*', 'projects.project_name',)
+            ->where('assignee_id', $userId)
+            ->leftJoin('projects', 'tasks.project_id', 'projects.id')
+            ->get();
+        return response()->json([
+            'status' => true,
+            'taskList' => $data
         ]);
     }
 
@@ -75,10 +102,8 @@ class TaskController extends Controller
     public function update(StoreTaskRequest $request, $id)
     {
         $data = Task::findOrFail($id)->update($request->all());
-
         return response()->json([
-            'status' => true,
-            'updatedData' => $data
+            'updated' => $data
         ]);
     }
 

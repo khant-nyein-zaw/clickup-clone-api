@@ -30,6 +30,7 @@ class StoreTaskRequest extends FormRequest
             'description' => 'min:10',
             'project_id' => 'required|integer',
             'priority' => 'required|integer',
+            'assignee_id' => 'required|integer',
             'started_at' => 'required|date',
             'ended_at' => 'required|date'
         ];

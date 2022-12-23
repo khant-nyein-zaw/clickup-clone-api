@@ -11,9 +11,9 @@ class UserController extends Controller
     /**
      * display a user list except his own account
      */
-    public function userList($id)
+    public function userList()
     {
-        $users = User::where('id', '!=', $id)->get();
+        $users = User::where('id', '!=', request()->user()->id)->get();
         return response()->json([
             'userList' => $users
         ]);
