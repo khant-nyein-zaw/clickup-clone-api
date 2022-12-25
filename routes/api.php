@@ -20,9 +20,7 @@ Route::post('/login', [AuthController::class, 'login']);
  * API resources routes
  */
 Route::middleware('auth:sanctum')->group(function () {
-    // counts api of tasks, projects, teams
     Route::get('/counts', [HomeController::class, 'getCounts']);
-    // user list for assigning tasks
     Route::get('/userList', [UserController::class, 'userList']);
     Route::get('/assignedTasks/{userId}', [TaskController::class, 'tasksAssigned']);
     Route::put('/changeTaskStage/{id}', [TaskController::class, 'changeTaskStage']);

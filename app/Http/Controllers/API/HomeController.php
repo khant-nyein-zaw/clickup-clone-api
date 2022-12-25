@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Team;
 use App\Models\Project;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 
 class HomeController extends Controller
 {

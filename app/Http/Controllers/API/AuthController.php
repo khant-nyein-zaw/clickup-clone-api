@@ -27,7 +27,7 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'account registeration completed successfully',
             'token' => $tokenResult->plainTextToken,
-            'userInfo' => $user
+            'user' => $user
         ], 200);
     }
 
@@ -49,7 +49,7 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'account logged in successfully',
             'token' => $user->createToken('api token')->plainTextToken,
-            'userInfo' => $user
+            'user' => $user
         ], 200);
     }
 }
