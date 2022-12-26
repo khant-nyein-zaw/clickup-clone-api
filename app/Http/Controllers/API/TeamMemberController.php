@@ -35,11 +35,7 @@ class TeamMemberController extends Controller
      */
     public function store(StoreTeamMemberRequest $request)
     {
-        $data = TeamMember::create([
-            'user_id' => $request->user()->id,
-            'team_id' => $request->team_id,
-            'role_id' => $request->role_id
-        ]);
+        $data = TeamMember::create($request->all());
 
         return response()->json([
             'status' => true,

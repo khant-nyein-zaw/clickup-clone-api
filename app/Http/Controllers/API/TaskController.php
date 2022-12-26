@@ -16,9 +16,11 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $data = Task::select('tasks.*', 'projects.project_name')
+        $data = Task::select('tasks.*', 'projects.project_name', 'users.name as assignee', 'teams.team_name')
             ->leftJoin('projects', 'tasks.project_id', 'projects.id')
-            ->leftJoin('users', 'tasks.assignee', 'users.id')
+            ->leftJoin('users', 'tasks.assignee_id', 'users.id')
+            ->leftJoin('team_members', 'tasks.assignee_id', 'team_members.user_id')
+            ->leftJoin('teams', 'team_members.team_id', 'teams.id')
             ->get();
         return response()->json([
             'status' => true,
@@ -80,7 +82,7 @@ class TaskController extends Controller
      * @param  int  $userId
      * @return \Illuminate\Http\Response
      */
-    public function tasksAssigned($userId)
+    public function getToDos($userId)
     {
         $data = Task::select('tasks.*', 'projects.project_name',)
             ->where('assignee_id', $userId)
@@ -88,7 +90,7 @@ class TaskController extends Controller
             ->get();
         return response()->json([
             'status' => true,
-            'taskList' => $data
+            'toDos' => $data
         ]);
     }
 

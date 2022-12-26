@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\API\HomeController;
+use App\Http\Controllers\API\CountController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\TaskController;
 use App\Http\Controllers\API\TeamController;
@@ -20,9 +20,9 @@ Route::post('/login', [AuthController::class, 'login']);
  * API resources routes
  */
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/counts', [HomeController::class, 'getCounts']);
+    Route::get('/counts', [CountController::class, 'getCounts']);
     Route::get('/userList', [UserController::class, 'userList']);
-    Route::get('/assignedTasks/{userId}', [TaskController::class, 'tasksAssigned']);
+    Route::get('/toDos/{userId}', [TaskController::class, 'getToDos']);
     Route::put('/changeTaskStage/{id}', [TaskController::class, 'changeTaskStage']);
     // resources
     Route::apiResources([

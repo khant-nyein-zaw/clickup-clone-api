@@ -24,7 +24,7 @@ class UpdateTaskStageRequest extends FormRequest
     public function rules()
     {
         return [
-            'task_stage' => 'required|integer'
+            "task_stage" => "required|integer"
         ];
     }
 }

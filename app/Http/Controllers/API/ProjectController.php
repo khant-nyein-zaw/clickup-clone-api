@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Models\Task;
 
 class ProjectController extends Controller
 {
@@ -90,6 +91,7 @@ class ProjectController extends Controller
     {
         $data = Project::findOrFail($id)->delete();
         ProjectUser::where('project_id', $id)->delete();
+        Task::where('project_id', $id)->delete();
         return response()->json([
             'isDeleted' => $data
         ]);
