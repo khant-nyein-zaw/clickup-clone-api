@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreProjectRequest;
+use App\Jobs\CreateProjectsInBatch;
+use App\Models\Task;
 use App\Models\Project;
 use App\Models\ProjectUser;
-use App\Models\Task;
+use App\Helpers\JsonResponder;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProjectRequest;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index()
     {
@@ -28,33 +31,21 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function store(StoreProjectRequest $request)
     {
-        $project = Project::create($request->all());
+        $payload = $request->validated();
+        CreateProjectsInBatch::dispatch($payload);
 
-        if (isset($project)) {
-            $createdProject = ProjectUser::create([
-                'user_id' => $request->user()->id,
-                'project_id' => $project->id
-            ]);
-        }
-
-        return response()->json([
-            'status' => true,
-            'createdData' => [
-                'project' => $project,
-                'user' => $createdProject
-            ]
-        ]);
+        return JsonResponder::success("New project created");
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function show($id)
     {
@@ -70,7 +61,7 @@ class ProjectController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function update(StoreProjectRequest $request, $id)
     {
@@ -85,7 +76,7 @@ class ProjectController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function destroy($id)
     {
